@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Flow Modelling & Reinforcement Learning — Deniz Coban</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Plotly & Prism -->
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], tags: 'ams' },
+            startup: { pageReady: () => MathJax.startup.defaultPageReady() }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased selection:bg-blue-400/30">
+
+    <div class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+        
+        <header class="mb-12 pb-6 border-b border-[var(--border-color)] flex flex-wrap justify-between items-center gap-4">
+            <a href="index.html" class="pill-btn">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m6-6l-6 6 6 6"/>
+                </svg>
+                <span>Back to Home</span>
+            </a>
+
+            <div class="flex items-center gap-2.5">
+                <a href="https://github.com/deniz-cbn/traffic-lwr-rl" target="_blank" rel="noopener" aria-label="GitHub Repository" title="GitHub Repository" class="icon-btn">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                </a>
+                <button onclick="toggleTheme()" aria-label="Toggle Light/Dark Mode" title="Toggle Theme" class="icon-btn">
+                    <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/>
+                    </svg>
+                    <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <article>
+            <div class="mb-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3" style="background-color: var(--pastel-blue-bg); color: var(--accent-primary);">
+                    Best Independent Mathematical Research Project Award
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-3">
+                    Traffic Flow Modelling &amp; Reinforcement Learning via the LWR Conservation Law and Godunov Schemes
+                </h1>
+                <div class="text-sm text-[var(--text-muted)]">
+                    Deniz Coban · Python, NumPy, FastAPI, PDEs
+                </div>
+            </div>
+
+            <!-- Interactive Figures -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+                <div class="surface-card p-4">
+                    <div id="plot-traffic-fd" class="w-full h-56"></div>
+                </div>
+                <div class="surface-card p-4">
+                    <div id="plot-traffic-tts" class="w-full h-56"></div>
+                </div>
+            </div>
+
+            <!-- Full Content -->
+            <div class="academic-report">
+                <div class="thm-box">
+                    <span class="thm-title">Overview</span>
+                    Awarded the school prize for <strong>Best Independent Mathematical Research Project</strong>, this study models urban road networks as a 1D compressible fluid governed by the nonlinear Lighthill–Whitham–Richards (LWR) conservation law $\partial_t \rho + \partial_x q(\rho) = 0$. We discretise the PDE with a conservative Godunov demand–supply finite-volume scheme, proving its equivalence to the exact Riemann flux and capturing shockwaves and rarefaction waves across signalised grids of 1 to 36 junctions ($1\times 1$ to $6\times 6$). We then engineer a shared-table Q-learning signal controller over a compressed 96-state space using network-wide flux rewards and sensor-informed priors to accelerate cold-start convergence. Across 6 held-out demand seeds per load against sensor-actuated and fixed-time baselines, the controller raises junction flux by up to <strong>2.9%</strong> and reduces total time spent (TTS) by <strong>7–19%</strong> at medium load on grids of $2\times 2$ and larger.
+                </div>
+
+                <h2>1. Macroscopic Conservation Law &amp; Greenshields Closure</h2>
+                <p>
+                    Let $\rho(x,t) \in [0, \rho_{\max}]$ denote spatial vehicle density (veh/m) and $q(x,t)$ denote macroscopic flow rate (veh/s) along a road link $x \in [0, L]$. Conservation of vehicles over any control volume $[x_1, x_2]$ requires $\frac{d}{dt}\int_{x_1}^{x_2} \rho(x,t)\,dx = q(x_1,t) - q(x_2,t)$, yielding the scalar hyperbolic PDE:
+                </p>
+                <div class="math-block">
+                    $$\frac{\partial \rho}{\partial t} + \frac{\partial q(\rho)}{\partial x} = 0, \qquad q(\rho) = \rho v(\rho) = v_f \rho \left(1 - \frac{\rho}{\rho_{\max}}\right)$$
+                </div>
+                <p>
+                    where $v_f > 0$ is the free-flow speed and $\rho_{\max} > 0$ is the jam density. Because $q''(\rho) = -2v_f / \rho_{\max} < 0$, the flux function $q(\rho)$ is strictly concave and attains its unique capacity maximum $q_{\max} = \frac{1}{4} v_f \rho_{\max}$ at the critical density $\rho_c = \frac{1}{2}\rho_{\max}$.
+                </p>
+
+                <h2>2. Method of Characteristics, Shockwaves &amp; Rarefaction Fans</h2>
+                <p>
+                    For smooth solutions, the chain rule gives the quasi-linear advection equation $\partial_t \rho + c(\rho)\partial_x \rho = 0$ with kinematic wave speed:
+                </p>
+                <div class="math-block">
+                    $$c(\rho) = q'(\rho) = v_f \left(1 - \frac{2\rho}{\rho_{\max}}\right)$$
+                </div>
+                <div class="thm-box">
+                    <span class="thm-title">Theorem 1 (Rankine–Hugoniot Jump Condition &amp; Entropy Waves)</span>
+                    Across a discontinuity $x = \xi(t)$ separating upstream density $\rho_L$ and downstream density $\rho_R$, integral mass conservation enforces the Rankine–Hugoniot shock speed:
+                    $$s = \frac{d\xi}{dt} = \frac{q(\rho_R) - q(\rho_L)}{\rho_R - \rho_L} = v_f \left(1 - \frac{\rho_L + \rho_R}{\rho_{\max}}\right)$$
+                    By the Lax entropy condition $c(\rho_L) > s > c(\rho_R)$, a discontinuous shockwave forms if and only if $\rho_L < \rho_R$ (vehicles decelerating into the back of a queue). Conversely, when a signal turns green and a dense queue discharges into an empty link ($\rho_L > \rho_R$), characteristics fan outward in a continuous self-similar rarefaction wave $\rho(x,t) = \frac{\rho_{\max}}{2}\left(1 - \frac{x}{v_f t}\right)$ for $c(\rho_L) \le x/t \le c(\rho_R)$.
+                </div>
+
+                <h2>3. Conservative Godunov Demand–Supply Scheme</h2>
+                <p>
+                    Partitioning each road link into $N$ finite-volume cells $C_i = [x_{i-1/2}, x_{i+1/2}]$ of width $\Delta x = L/N$, cell averages $\rho_i^n$ evolve via the exact conservation update:
+                </p>
+                <div class="math-block">
+                    $$\rho_i^{n+1} = \rho_i^n + \frac{\Delta t}{\Delta x}\left(F_{i-1/2}^n - F_{i+1/2}^n\right)$$
+                </div>
+                <p>
+                    Splitting $q(\rho)$ at the critical density $\rho_c$ defines upstream kinematic <strong>Demand</strong> $D(\rho)$ and downstream <strong>Supply</strong> $S(\rho)$:
+                </p>
+                <div class="math-block">
+                    $$D(\rho) = \begin{cases} q(\rho) & 0 \le \rho \le \rho_c \\ q_{\max} & \rho_c < \rho \le \rho_{\max} \end{cases}, \qquad S(\rho) = \begin{cases} q_{\max} & 0 \le \rho \le \rho_c \\ q(\rho) & \rho_c < \rho \le \rho_{\max} \end{cases}$$
+                </div>
+                <div class="thm-box">
+                    <span class="thm-title">Proposition 2 (Equivalence to the Exact Riemann Flux)</span>
+                    For any interface Riemann problem $(\rho_L, \rho_R)$ with strictly concave flux $q(\rho)$, the exact Godunov flux is algebraically equivalent to the minimum of upstream demand and downstream supply:
+                    $$F_{\text{God}}(\rho_L, \rho_R) = \min\big(D(\rho_L),\, S(\rho_R)\big)$$
+                    Under the CFL condition $\Delta t \le \Delta x / v_f$, the scheme preserves $\rho_i^n \in [0, \rho_{\max}]$.
+                </div>
+
+                <details class="impl-details">
+                    <summary>
+                        <span>Python Implementation — Vectorised Godunov Demand–Supply Solver</span>
+                        <span>[Show / Hide Code]</span>
+                    </summary>
+                    <pre><code class="language-python">import numpy as np
+
+def demand(rho: np.ndarray, vf: float, rho_max: float) -> np.ndarray:
+    rho_c = 0.5 * rho_max
+    q_max = 0.25 * vf * rho_max
+    q = vf * rho * (1.0 - rho / rho_max)
+    return np.where(rho <= rho_c, q, q_max)
+
+def supply(rho: np.ndarray, vf: float, rho_max: float) -> np.ndarray:
+    rho_c = 0.5 * rho_max
+    q_max = 0.25 * vf * rho_max
+    q = vf * rho * (1.0 - rho / rho_max)
+    return np.where(rho <= rho_c, q_max, q)
+
+def godunov_step(rho: np.ndarray, dx: float, dt: float, vf: float, rho_max: float,
+                 q_in: float, s_out: float) -> np.ndarray:
+    d = demand(rho, vf, rho_max)
+    s = supply(rho, vf, rho_max)
+    flux = np.empty(len(rho) + 1)
+    flux[0] = min(q_in, s[0])
+    flux[1:-1] = np.minimum(d[:-1], s[1:])
+    flux[-1] = min(d[-1], s_out)
+    return rho + (dt / dx) * (flux[:-1] - flux[1:])</code></pre>
+                </details>
+
+                <h2>4. Shared-Table Q-Learning, Sensor Priors &amp; Multi-Agent Scaling</h2>
+                <p>
+                    Across signalised grids of 1 to 36 junctions ($1\times 1$ to $6\times 6$), independent tabular controllers would suffer exponential joint state-space growth ($96^{36}$). Instead, all junctions share a single Q-table $Q(s, a)$ over a compressed <strong>96-state phase-relative representation</strong>:
+                </p>
+                <div class="math-block">
+                    $$s_t = \big(\text{bin}(\bar{\rho}_{\text{green}}) \in \{0..3\},\; \text{bin}(\bar{\rho}_{\text{red}}) \in \{0..3\},\; \text{bin}(\tau_{\text{elapsed}}) \in \{0..2\},\; \mathbb{I}_{\text{spillback}} \in \{0,1\}\big), \qquad |\mathcal{S}| = 96$$
+                </div>
+                <p>
+                    The controller is trained on <strong>network-wide flux rewards</strong> and initialised with <strong>sensor-informed priors</strong> to accelerate cold-start convergence. Benchmarked against both <strong>sensor-actuated</strong> and <strong>fixed-time</strong> control over <strong>6 held-out demand seeds per load</strong>:
+                </p>
+                <table class="quant-table">
+                    <thead>
+                        <tr>
+                            <th>Grid Size</th>
+                            <th>Junctions</th>
+                            <th>Medium Load TTS vs Actuated</th>
+                            <th>Heavy Load TTS vs Actuated</th>
+                            <th>Peak Junction Flux Gain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1×1</td><td>1</td><td>−7.5%</td><td>+9.5%</td><td>+0.8%</td></tr>
+                        <tr><td>2×2</td><td>4</td><td>−10.3%</td><td>−15.8%</td><td>+1.7%</td></tr>
+                        <tr><td>3×3</td><td>9</td><td>−15.4%</td><td>−10.2%</td><td>+2.2%</td></tr>
+                        <tr><td>4×4</td><td>16</td><td>−19.4%</td><td>−17.0%</td><td>+2.9%</td></tr>
+                        <tr><td>6×6</td><td>36</td><td>−16.4%</td><td>−17.0%</td><td>+2.6%</td></tr>
+                    </tbody>
+                </table>
+                <p>
+                    <strong>Scaling &amp; Multi-Agent Constraints:</strong> The efficiency gain of the RL system over baseline methods scales positively with network size and complexity—cutting total time spent by <strong>7–19%</strong> at medium load on grids of $2\times 2$ and up, and raising junction flux by up to <strong>2.9%</strong>—while identifying <em>partial observability</em> and <em>multi-agent credit assignment</em> as constraints on multi-agent scaling.
+                </p>
+            </div>
+        </article>
+
+        <footer class="mt-14 pt-6 border-t border-[var(--border-color)] flex justify-between items-center text-xs text-[var(--text-muted)]">
+            <a href="index.html" class="pill-btn">← All Projects</a>
+            <a href="option-pricing.html" class="pill-btn">Next: Option Pricing &amp; Delta Hedging →</a>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

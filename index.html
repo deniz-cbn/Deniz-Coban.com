@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deniz Coban</title>
+
+    <!-- Rounded & Clean Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], tags: 'ams' },
+            startup: { pageReady: () => MathJax.startup.defaultPageReady() }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased selection:bg-blue-400/30">
+
+    <div class="max-w-5xl mx-auto px-6 py-12 md:py-16 min-h-screen flex flex-col justify-between gap-12">
+        
+        <div class="space-y-12">
+            <!-- Centred Header -->
+            <header class="text-center space-y-4">
+                <div class="space-y-1.5">
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-[var(--text-primary)]">
+                        Deniz Coban
+                    </h1>
+                    <p class="text-base md:text-lg text-[var(--text-secondary)] font-medium">
+                        MMath Mathematics @ University of Manchester
+                    </p>
+                </div>
+
+                <!-- Social & Theme Icons -->
+                <div class="flex items-center justify-center gap-3 pt-1">
+                    <a href="https://github.com/deniz-cbn" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub" class="icon-btn">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                        </svg>
+                    </a>
+
+                    <a href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn" class="icon-btn">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                        </svg>
+                    </a>
+
+                    <button onclick="toggleTheme()" aria-label="Toggle Light/Dark Mode" title="Toggle Theme" class="icon-btn">
+                        <!-- Sun icon (shown in dark mode) -->
+                        <svg id="theme-icon-sun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/>
+                        </svg>
+                        <!-- Moon icon (shown in light mode) -->
+                        <svg id="theme-icon-moon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+
+                    <button onclick="toggleCrazyTaxi(true)" aria-label="Crazy Taxi Arcade Mode" title="Crazy Taxi Arcade Mode" class="icon-btn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11M3 16v-3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3m-18 0h18m-18 0v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2m10 0v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2M7 13.5h.01M17 13.5h.01M10 3h4v2h-4V3z"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Compact Overview / Skills Section (Replaces long paragraphs & bottom section) -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="surface-card p-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3" style="background-color: var(--pastel-blue-bg); color: var(--accent-primary);">
+                        Mathematical Focus
+                    </div>
+                    <ul class="text-sm text-[var(--text-secondary)] space-y-2 leading-relaxed">
+                        <li>• Conservation PDEs &amp; Riemann Problems</li>
+                        <li>• Black–Scholes PDE &amp; Delta Hedging</li>
+                        <li>• Markov Decision Processes &amp; RL</li>
+                    </ul>
+                </div>
+
+                <div class="surface-card p-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3" style="background-color: var(--pastel-amber-bg); color: var(--accent-warm);">
+                        Education &amp; Honours
+                    </div>
+                    <ul class="text-sm text-[var(--text-secondary)] space-y-1.5 leading-relaxed">
+                        <li>• MMath, University of Manchester</li>
+                        <li>• UKMT Senior Challenge: Gold</li>
+                        <li>• Senior Kangaroo: 1st in School</li>
+                        <li>• Best Independent Math Research Award</li>
+                    </ul>
+                </div>
+
+                <div class="surface-card p-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3" style="background-color: var(--pastel-green-bg); color: var(--accent-secondary);">
+                        Technical Stack
+                    </div>
+                    <ul class="text-sm text-[var(--text-secondary)] space-y-2 leading-relaxed">
+                        <li>• Python (NumPy, SciPy, Pandas)</li>
+                        <li>• Finite-Volume &amp; Monte Carlo</li>
+                        <li>• FastAPI, pytest, Git &amp; Unix</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="space-y-5">
+                <h2 class="text-lg font-bold tracking-tight text-[var(--text-primary)] px-1">
+                    Projects
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- PROJECT 1 CARD -->
+                    <a href="traffic-lwr.html" class="surface-card surface-card-interactive p-6 flex flex-col justify-between gap-6 group">
+                        <div class="space-y-4">
+                            <!-- Soft Pastel Preview Banner -->
+                            <div class="w-full h-36 rounded-2xl border border-[var(--border-color)] flex items-center justify-center overflow-hidden relative" style="background: var(--pastel-blue-bg);">
+                                <svg class="w-4/5 h-24 opacity-85" viewBox="0 0 320 90" fill="none">
+                                    <path d="M 15 75 Q 160 -25 305 75" stroke="var(--accent-primary)" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="85" y1="42" x2="235" y2="55" stroke="var(--accent-warm)" stroke-width="2.2" stroke-dasharray="5 4"/>
+                                    <circle cx="85" cy="42" r="4.5" fill="var(--accent-primary)"/>
+                                    <circle cx="235" cy="55" r="4.5" fill="var(--accent-warm)"/>
+                                </svg>
+                                <span class="absolute bottom-2.5 right-3.5 font-mono text-[11px] text-[var(--text-muted)]">
+                                    ∂ₜρ + ∂ₓq(ρ) = 0
+                                </span>
+                            </div>
+
+                            <div class="space-y-2">
+                                <h3 class="text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
+                                    Traffic Flow Modelling &amp; Reinforcement Learning
+                                </h3>
+                                <p class="text-sm text-[var(--text-secondary)] leading-relaxed">
+                                    Solved the nonlinear LWR conservation law with a conservative Godunov demand–supply scheme across grids of 1 to 36 junctions, paired with a 96-state shared Q-learning controller that raises junction flux by up to 2.9% and cuts total time spent by 7–19%.
+                                </p>
+                                <p class="text-xs italic text-[var(--text-muted)] pt-1">
+                                    Python, NumPy, FastAPI, PDEs
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="pill-btn">
+                                <span>Read More</span>
+                                <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </a>
+
+                    <!-- PROJECT 2 CARD -->
+                    <a href="option-pricing.html" class="surface-card surface-card-interactive p-6 flex flex-col justify-between gap-6 group">
+                        <div class="space-y-4">
+                            <!-- Soft Pastel Preview Banner -->
+                            <div class="w-full h-36 rounded-2xl border border-[var(--border-color)] flex items-center justify-center overflow-hidden relative" style="background: var(--pastel-green-bg);">
+                                <svg class="w-4/5 h-24 opacity-85" viewBox="0 0 320 90" fill="none">
+                                    <path d="M 15 68 L 75 56 L 135 61 L 195 38 L 255 28 L 305 18" stroke="var(--accent-secondary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M 15 68 L 75 72 L 135 50 L 195 54 L 255 42 L 305 34" stroke="var(--accent-primary)" stroke-width="2" stroke-opacity="0.65" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="15" y1="46" x2="305" y2="24" stroke="var(--accent-warm)" stroke-width="2" stroke-dasharray="5 4"/>
+                                </svg>
+                                <span class="absolute bottom-2.5 right-3.5 font-mono text-[11px] text-[var(--text-muted)]">
+                                    σ_hedge ∼ O(N⁻¹/²)
+                                </span>
+                            </div>
+
+                            <div class="space-y-2">
+                                <h3 class="text-xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-secondary)] transition-colors">
+                                    Option Pricing &amp; Delta Hedging under Black–Scholes
+                                </h3>
+                                <p class="text-sm text-[var(--text-secondary)] leading-relaxed">
+                                    Derived the Black–Scholes PDE and Greeks from a delta-hedging argument via Itô's Lemma, validated the call price against $10^6$-path Monte Carlo ($10.45$ vs. $10.47 \pm 0.01$), and simulated discrete delta hedging over $20{,}000$ paths (log–log slope $-0.49$).
+                                </p>
+                                <p class="text-xs italic text-[var(--text-muted)] pt-1">
+                                    Python, NumPy, SciPy
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="pill-btn">
+                                <span>Read More</span>
+                                <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <footer class="pt-6 border-t border-[var(--border-color)] flex justify-between items-center text-xs text-[var(--text-muted)]">
+            <span>&copy; 2026 Deniz Coban</span>
+            <span>University of Manchester</span>
+        </footer>
+    </div>
+
+
+    <!-- =================================================================== -->
+    <!-- SPECIAL MODE: GAMECUBE CRAZY TAXI PORTFOLIO CRUISER                 -->
+    <!-- =================================================================== -->
+    <div id="crazy-taxi-view" class="hidden fixed inset-0 z-50 overflow-hidden">
+        <!-- Fullscreen 3D Road & Cab Canvas -->
+        <canvas id="ct-canvas" class="absolute inset-0 w-full h-full block"></canvas>
+
+        <!-- Top Checker Strip -->
+        <div class="absolute top-0 inset-x-0 h-3 ct-checker-bar z-20 border-b-2 border-black"></div>
+
+        <!-- Top Arcade HUD Row -->
+        <div class="absolute top-5 inset-x-4 md:inset-x-6 z-20 grid grid-cols-1 md:grid-cols-3 items-start gap-3 pointer-events-none">
+            
+            <!-- 1. TOP-LEFT: Clean Driver License Button + Fare & High Score -->
+            <div class="flex flex-col items-start gap-2 pointer-events-auto">
+                <div class="flex items-stretch gap-2.5">
+                    <!-- Score & Best Box -->
+                    <div class="ct-hud-box px-3.5 py-2 flex flex-col justify-center min-w-[135px]">
+                        <div class="flex items-center justify-between gap-3 text-[10px] font-sans font-extrabold text-yellow-300 tracking-wider">
+                            <span>FARE</span>
+                            <span id="ct-best-display" class="text-amber-200/90">BEST: $0</span>
+                        </div>
+                        <div id="ct-fare-display" class="text-2xl md:text-3xl text-green-400 ct-text-stroke tracking-wider leading-tight">
+                            $0
+                        </div>
+                    </div>
+
+                    <!-- Driver's License Button (About Me) -->
+                    <button onclick="openDriverLicenseModal()" class="ct-hud-box px-3.5 py-2 text-left hover:border-green-400 transition-colors cursor-pointer flex flex-col justify-center">
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-1.5 py-0.5 bg-yellow-400 text-black font-sans font-extrabold text-[10px] rounded leading-none">🪪 LICENSE</span>
+                            <span class="text-[11px] font-sans font-bold text-amber-200 tracking-wide">ABOUT ME</span>
+                        </div>
+                        <div class="text-base md:text-lg text-white ct-text-stroke tracking-wide leading-tight mt-1">
+                            DENIZ COBAN
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Live Passenger / Combo Status Banner -->
+                <div id="ct-combo-banner" class="px-3 py-1 bg-black/80 border-2 border-yellow-400 text-xs md:text-sm font-sans font-extrabold text-yellow-300 tracking-wide rounded shadow-md">
+                    🚕 CAB EMPTY — PULL ONTO SHOULDER TO PICK UP A PASSENGER!
+                </div>
+            </div>
+
+            <!-- 2. TOP-CENTER: 60s Countdown Timer & Radar Banner -->
+            <div class="flex flex-col items-center justify-self-center">
+                <div class="ct-hud-box px-6 py-1.5 text-center">
+                    <div class="text-[10px] font-sans font-extrabold text-amber-300 tracking-widest">TIME LIMIT</div>
+                    <div id="ct-timer-display" class="text-4xl md:text-5xl text-yellow-400 ct-text-stroke leading-none">60.00</div>
+                </div>
+                <div id="ct-target-banner" class="mt-2 px-3 py-1 bg-green-600/95 border-2 border-black text-xs font-sans font-extrabold tracking-wide uppercase text-white shadow-md text-center">
+                    <span id="ct-next-stop-name" class="text-yellow-200">SCANNING ROADSIDE FOR PASSENGERS...</span>
+                </div>
+            </div>
+
+            <!-- 3. TOP-RIGHT: Menu & Exit Buttons Only (No Cheat Warps) -->
+            <div class="flex items-center justify-end gap-2 pointer-events-auto">
+                <button onclick="openCrazyTaxiMainMenu('PAUSED')" class="ct-btn-arcade px-3.5 py-1.5 text-xs md:text-sm">
+                    ☰ RULES / MENU
+                </button>
+                <button onclick="toggleCrazyTaxi(false)" class="ct-btn-arcade px-3.5 py-1.5 text-xs md:text-sm flex items-center gap-1.5">
+                    <span class="ct-gc-b">B</span>
+                    <span>EXIT [ESC]</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- MAIN MENU & RUN OVER SUMMARY OVERLAY                            -->
+        <!-- =============================================================== -->
+        <div id="ct-main-menu" class="absolute inset-0 z-30 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+            <div class="ct-card-modal max-w-2xl w-full p-6 md:p-8 text-white my-auto">
+                <!-- Title Header -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b-2 border-yellow-400/50">
+                    <div>
+                        <div class="inline-block px-2.5 py-0.5 bg-yellow-400 text-black font-extrabold text-xs uppercase tracking-wider border-2 border-black">
+                            SEGA / GAMECUBE ARCADE MODE · 60-SECOND TIME ATTACK
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-yellow-300 ct-text-stroke mt-1 tracking-wide">
+                            CRAZY TAXI: MANCHESTER EDITION
+                        </h2>
+                    </div>
+                    <button onclick="openDriverLicenseModal()" class="ct-btn-arcade px-3 py-1.5 text-xs">
+                        🪪 VIEW DRIVER'S LICENSE (ABOUT ME)
+                    </button>
+                </div>
+
+                <!-- Dynamic Run-Over Summary Banner (Hidden on First Launch, Shown on Crash / Time Up) -->
+                <div id="ct-run-summary" class="hidden mb-5 p-4 rounded-xl bg-red-950/80 border-2 border-yellow-400 space-y-2">
+                    <div id="ct-run-reason" class="text-xl md:text-2xl font-extrabold text-yellow-300 ct-text-stroke">
+                        ⏱️ TIME'S UP — 60s RUN COMPLETE!
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center pt-1">
+                        <div class="p-2 rounded bg-black/50 border border-white/15">
+                            <div class="text-[10px] text-slate-300 uppercase font-bold">FINAL FARE</div>
+                            <div id="ct-summary-fare" class="text-xl font-extrabold text-green-400">$0</div>
+                        </div>
+                        <div class="p-2 rounded bg-black/50 border border-white/15">
+                            <div class="text-[10px] text-slate-300 uppercase font-bold">FARES DROPPED OFF</div>
+                            <div id="ct-summary-Count" class="text-xl font-extrabold text-yellow-300">0</div>
+                        </div>
+                        <div class="p-2 rounded bg-black/50 border border-white/15">
+                            <div class="text-[10px] text-slate-300 uppercase font-bold">HIGH SCORE</div>
+                            <div id="ct-summary-best" class="text-xl font-extrabold text-amber-300">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How to Play Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs md:text-sm">
+                    <div class="p-3.5 rounded-xl bg-black/50 border border-yellow-400/40 space-y-1.5">
+                        <div class="font-extrabold text-yellow-300 uppercase">1. Pick Up &amp; Deliver Passengers</div>
+                        <p class="text-slate-200 leading-relaxed">
+                            Your cab starts <strong>empty</strong>. Steer onto the <strong>left or right roadside shoulder</strong> to pick up waiting passengers. Once someone is in your cab, drive them to the glowing <strong>DROP-OFF ZONE</strong> ahead before picking up anyone else!
+                        </p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-black/50 border border-emerald-400/40 space-y-1.5">
+                        <div class="font-extrabold text-emerald-300 uppercase">2. Project VIPs vs. City Fares</div>
+                        <p class="text-slate-200 leading-relaxed">
+                            <strong>★ Gold Ring VIPs</strong> are my <strong>Projects</strong> (<em>Traffic Flow &amp; RL</em> and <em>Black–Scholes Hedging</em>)—picking them up opens their project briefing while you carry them to their drop-off! <strong>● Green Ring Passengers</strong> are regular city fares for fast cash.
+                        </p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-black/50 border border-red-400/40 space-y-1.5">
+                        <div class="font-extrabold text-red-300 uppercase">3. 3 Lanes &amp; Crash Obstacles</div>
+                        <p class="text-slate-200 leading-relaxed">
+                            Weave across all <strong>3 highway lanes</strong> to dodge traffic cars and roadblocks. <strong>Hitting any obstacle crashes your cab</strong> and immediately ends your run! Near-misses award <strong>+$100 CRAZY THROUGH!</strong>
+                        </p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-black/50 border border-blue-400/40 space-y-1.5">
+                        <div class="font-extrabold text-blue-300 uppercase">4. Crazy Drift &amp; Controls</div>
+                        <ul class="text-slate-200 space-y-1">
+                            <li>• <strong>A / D</strong> or <strong>← / →</strong> : Steer across 3 lanes &amp; shoulders</li>
+                            <li>• <strong>W / ↑</strong> : Boost Speed &nbsp;|&nbsp; <strong>S / ↓</strong> : Brake</li>
+                            <li>• <strong>HOLD SPACE + STEER</strong> : <strong>Crazy Drift</strong> (sparks + combo cash!)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Start Run Button Row -->
+                <div class="mt-6 pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="toggleCrazyTaxi(false)" class="ct-btn-arcade px-4 py-2 text-xs md:text-sm">
+                        ← BACK TO STANDARD WEBSITE
+                    </button>
+                    <button onclick="startCrazyTaxiRun()" class="ct-btn-arcade ct-btn-green px-6 py-2.5 text-base md:text-lg flex items-center gap-2">
+                        <span class="ct-gc-a">A</span>
+                        <span id="ct-start-btn-label">🚕 START 60s CRAZY RUN!</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- MODAL FOR DRIVER'S LICENSE OR PICKED-UP PROJECT VIP BRIEFING    -->
+        <!-- =============================================================== -->
+        <div id="ct-stop-modal" class="hidden absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm">
+            <div class="ct-card-modal max-w-xl w-full p-6 md:p-7 text-white relative">
+                <div class="flex items-start justify-between gap-2 pb-3 mb-4 border-b-2 border-yellow-400/50">
+                    <div>
+                        <span id="ct-modal-badge" class="inline-block px-2.5 py-0.5 bg-green-500 text-black font-extrabold text-xs uppercase tracking-wider border-2 border-black">
+                            OFFICIAL CRAZY CAB DRIVER'S LICENSE
+                        </span>
+                        <h2 id="ct-modal-title" class="text-2xl md:text-3xl font-extrabold text-yellow-300 ct-text-stroke mt-1">
+                            DENIZ COBAN — DRIVER LICENSE
+                        </h2>
+                    </div>
+                    <button onclick="closeCrazyTaxiModal()" class="ct-btn-arcade px-3 py-1 text-xs shrink-0">
+                        ✕ RESUME
+                    </button>
+                </div>
+
+                <!-- Dynamic Stop Content -->
+                <div id="ct-modal-body" class="space-y-4 text-sm text-slate-200 leading-relaxed">
+                </div>
+
+                <!-- Modal Footer Actions (No Cheat Next-Stop Button!) -->
+                <div class="mt-6 pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 text-xs text-yellow-300 font-bold">
+                        <span class="ct-gc-a">A</span>
+                        <span id="ct-modal-hint">TIMER PAUSED WHILE READING</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <a id="ct-modal-link" href="traffic-lwr.html" class="hidden ct-btn-arcade px-4 py-1.5 text-xs md:text-sm">
+                            OPEN FULL PROJECT PAGE ↗
+                        </a>
+                        <button onclick="closeCrazyTaxiModal()" id="ct-modal-continue-btn" class="ct-btn-arcade ct-btn-green px-4 py-1.5 text-xs md:text-sm">
+                            DRIVE PASSENGER TO DROP-OFF →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Arcade Controls & Speedometer Bar -->
+        <div class="absolute bottom-5 inset-x-4 md:inset-x-6 z-20 flex flex-wrap items-end justify-between gap-4 pointer-events-none">
+            <div class="ct-hud-box px-4 py-2 pointer-events-auto flex flex-wrap items-center gap-2.5 text-xs font-sans">
+                <span class="font-extrabold text-yellow-300">CONTROLS:</span>
+                <span class="font-bold text-white bg-black/60 px-2 py-0.5 rounded border border-yellow-400/50">A / D or ← / → : 3 Lanes &amp; Shoulders</span>
+                <span class="font-bold text-white bg-black/60 px-2 py-0.5 rounded border border-yellow-400/50">W / ↑ : Boost</span>
+                <span class="font-bold text-white bg-black/60 px-2 py-0.5 rounded border border-yellow-400/50">S / ↓ : Brake</span>
+                <span class="font-bold text-amber-300 bg-black/60 px-2 py-0.5 rounded border border-amber-400/60">HOLD SPACE + STEER : Crazy Drift!</span>
+            </div>
+
+            <!-- Right: Gear Shifter & Speedometer -->
+            <div class="ct-hud-box px-5 py-2 flex items-center gap-4">
+                <div class="text-center">
+                    <div class="text-[10px] font-sans font-extrabold text-yellow-300">STATUS</div>
+                    <div id="ct-gear-display" class="text-xl md:text-2xl text-green-400 ct-text-stroke">EMPTY</div>
+                </div>
+                <div class="h-8 w-0.5 bg-yellow-400/40"></div>
+                <div class="text-right">
+                    <div class="text-[10px] font-sans font-extrabold text-yellow-300">SPEED</div>
+                    <div class="text-3xl md:text-4xl text-white ct-text-stroke">
+                        <span id="ct-speed-display">62</span> <span class="text-sm text-amber-300">MPH</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Checker Strip -->
+        <div class="absolute bottom-0 inset-x-0 h-3 ct-checker-bar z-20 border-t-2 border-black"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

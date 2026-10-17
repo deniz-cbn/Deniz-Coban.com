@@ -1,0 +1,322 @@
+:root {
+    --bg-primary: #f6f5f0;
+    --bg-secondary: #eceae2;
+    --bg-card: #ffffff;
+    --bg-pill: #efede6;
+    --text-primary: #2b2d33;
+    --text-secondary: #5a5e6b;
+    --text-muted: #858996;
+    --border-color: #e2dfd5;
+    --accent-primary: #5b82c4;
+    --accent-secondary: #48997a;
+    --accent-warm: #c9834b;
+    --pastel-blue-bg: rgba(91, 130, 196, 0.10);
+    --pastel-green-bg: rgba(72, 153, 122, 0.10);
+    --pastel-amber-bg: rgba(201, 131, 75, 0.10);
+    --thm-bg: #f3f1ea;
+    --thm-border: #5b82c4;
+    --card-shadow: 0 6px 24px -6px rgba(35, 38, 45, 0.06);
+}
+
+html.dark {
+    --bg-primary: #1e2028;
+    --bg-secondary: #252832;
+    --bg-card: #272a35;
+    --bg-pill: #2f3340;
+    --text-primary: #eef0f5;
+    --text-secondary: #b0b6c6;
+    --text-muted: #7e8596;
+    --border-color: #363b49;
+    --accent-primary: #93b8f8;
+    --accent-secondary: #88cfa8;
+    --accent-warm: #f2b880;
+    --pastel-blue-bg: rgba(147, 184, 248, 0.11);
+    --pastel-green-bg: rgba(136, 207, 168, 0.11);
+    --pastel-amber-bg: rgba(242, 184, 128, 0.11);
+    --thm-bg: #222530;
+    --thm-border: #93b8f8;
+    --card-shadow: 0 8px 28px -6px rgba(10, 12, 18, 0.28);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.surface-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.surface-card-interactive:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9999px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+}
+
+.pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 9999px;
+    background-color: var(--bg-pill);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.pill-btn:hover {
+    border-color: var(--accent-primary);
+    background-color: var(--pastel-blue-bg);
+}
+
+/* Academic Report Pages */
+.academic-report {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.02rem;
+    line-height: 1.78;
+    color: var(--text-primary);
+}
+
+.academic-report h2 {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-top: 2.25rem;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.academic-report h3 {
+    font-weight: 600;
+    font-size: 1.04rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.academic-report p {
+    margin-bottom: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.thm-box {
+    background-color: var(--thm-bg);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--thm-border);
+    padding: 1.2rem 1.45rem;
+    margin: 1.35rem 0;
+    border-radius: 16px;
+    color: var(--text-primary);
+}
+
+.thm-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-primary);
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.math-block {
+    overflow-x: auto;
+    margin: 1.15rem 0;
+    padding: 0.4rem 0;
+}
+
+.quant-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    margin: 1.25rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.quant-table th {
+    background-color: var(--bg-secondary);
+    padding: 0.65rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.quant-table td {
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.quant-table tr:last-child td {
+    border-bottom: none;
+}
+
+.impl-details {
+    margin: 1.25rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.impl-details summary {
+    cursor: pointer;
+    padding: 0.75rem 1.15rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background-color: var(--bg-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.impl-details pre {
+    margin: 0 !important;
+    font-size: 0.8rem !important;
+}
+
+
+/* ==========================================================================
+   GAMECUBE CRAZY TAXI ARCADE MODE (SCOPED TO #crazy-taxi-view)
+   Does not affect the main website at all
+   ========================================================================== */
+
+#crazy-taxi-view {
+    font-family: 'Impact', 'Arial Black', 'Plus Jakarta Sans', sans-serif;
+    user-select: none;
+    background: #0d101c;
+    color: #fff;
+}
+
+.ct-text-stroke {
+    text-shadow:
+        -2px -2px 0 #000,
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         0px  4px 0 #000;
+}
+
+.ct-title-skew {
+    transform: skewX(-12deg) rotate(-2deg);
+    letter-spacing: 0.04em;
+}
+
+.ct-checker-bar {
+    background-image:
+        linear-gradient(45deg, #111 25%, transparent 25%),
+        linear-gradient(-45deg, #111 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #111 75%),
+        linear-gradient(-45deg, transparent 75%, #111 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    background-color: #facc15;
+}
+
+.ct-hud-box {
+    background: linear-gradient(180deg, rgba(20, 22, 34, 0.9) 0%, rgba(10, 12, 20, 0.94) 100%);
+    border: 3px solid #facc15;
+    box-shadow: 5px 5px 0 #000;
+    transform: skewX(-8deg);
+}
+
+.ct-card-modal {
+    background: linear-gradient(165deg, #1b1f33 0%, #101322 100%);
+    border: 4px solid #facc15;
+    box-shadow: 10px 10px 0 #000, 0 0 35px rgba(34, 197, 94, 0.45);
+    transform: skewX(-3deg);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.ct-btn-arcade {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    letter-spacing: 0.05em;
+    background: linear-gradient(180deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
+    color: #111;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    transform: skewX(-8deg);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    cursor: pointer;
+}
+
+.ct-btn-arcade:hover {
+    filter: brightness(1.1);
+    transform: skewX(-8deg) translate(-1px, -1px);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.ct-btn-arcade:active {
+    transform: skewX(-8deg) translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+}
+
+.ct-btn-green {
+    background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+    color: #fff;
+    text-shadow: 1px 2px 0 #000;
+}
+
+.ct-gc-a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, #34d399, #059669);
+    border: 2px solid #000;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    box-shadow: 2px 2px 0 #000;
+}
+
+.ct-gc-b {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
+    border: 2px solid #000;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    box-shadow: 2px 2px 0 #000;
+}
