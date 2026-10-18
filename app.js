@@ -219,6 +219,7 @@ const ctState = {
     playerX: 0.0,      // -1.12 (left roadside) .. -0.58 (L) .. 0.0 (M) .. +0.58 (R) .. +1.12 (right roadside)
     steerVel: 0,
     driftAngle: 0,     // Slip angle yaw during drift
+    driftDir: 0,       // Locked drift direction (-1 = left slide, +1 = right slide)
     driftCharge: 0,    // Accumulated drift duration
     driftCashAccum: 0,
     speed: 0.18,
@@ -310,16 +311,26 @@ function spawnInitialWorld() {
         });
     });
 
-    // Spawn obstacles across all 3 lanes (-0.58, 0.0, +0.58)
+    // Spawn denser obstacles across all 3 lanes (-0.58, 0.0, +0.58) to increase difficulty!
     const obstacleTemplates = [
-        { z: 36, laneIdx: 0, kind: 'car', color: '#ef4444', speed: 0.09, label: 'SEDAN' },
-        { z: 68, laneIdx: 1, kind: 'truck', color: '#3b82f6', speed: 0.07, label: 'TRUCK' },
-        { z: 102, laneIdx: 2, kind: 'barrier', color: '#f97316', speed: 0.0, label: 'ROADWORK' },
-        { z: 138, laneIdx: 0, kind: 'car', color: '#a855f7', speed: 0.10, label: 'COUPE' },
-        { z: 172, laneIdx: 1, kind: 'barrier', color: '#ef4444', speed: 0.0, label: 'BARRIER' },
-        { z: 208, laneIdx: 2, kind: 'truck', color: '#10b981', speed: 0.08, label: 'VAN' },
-        { z: 248, laneIdx: 1, kind: 'car', color: '#f59e0b', speed: 0.10, label: 'CAB' },
-        { z: 282, laneIdx: 0, kind: 'barrier', color: '#f97316', speed: 0.0, label: 'BARRIER' }
+        { z: 18, laneIdx: 0, kind: 'car', color: '#ef4444', speed: 0.11, label: 'SEDAN' },
+        { z: 34, laneIdx: 1, kind: 'truck', color: '#3b82f6', speed: 0.08, label: 'TRUCK' },
+        { z: 50, laneIdx: 2, kind: 'barrier', color: '#f97316', speed: 0.0, label: 'ROADWORK' },
+        { z: 66, laneIdx: 0, kind: 'truck', color: '#10b981', speed: 0.08, label: 'VAN' },
+        { z: 82, laneIdx: 1, kind: 'car', color: '#a855f7', speed: 0.12, label: 'COUPE' },
+        { z: 98, laneIdx: 2, kind: 'barrier', color: '#ef4444', speed: 0.0, label: 'BARRIER' },
+        { z: 114, laneIdx: 0, kind: 'barrier', color: '#f97316', speed: 0.0, label: 'ROADWORK' },
+        { z: 130, laneIdx: 1, kind: 'truck', color: '#f59e0b', speed: 0.09, label: 'LORRY' },
+        { z: 146, laneIdx: 2, kind: 'car', color: '#ec4899', speed: 0.13, label: 'SPORT' },
+        { z: 162, laneIdx: 0, kind: 'truck', color: '#06b6d4', speed: 0.07, label: 'TANKER' },
+        { z: 178, laneIdx: 1, kind: 'barrier', color: '#ef4444', speed: 0.0, label: 'BARRIER' },
+        { z: 194, laneIdx: 2, kind: 'car', color: '#f97316', speed: 0.11, label: 'CAB' },
+        { z: 210, laneIdx: 0, kind: 'car', color: '#8b5cf6', speed: 0.12, label: 'SEDAN' },
+        { z: 226, laneIdx: 1, kind: 'truck', color: '#10b981', speed: 0.08, label: 'TRUCK' },
+        { z: 242, laneIdx: 2, kind: 'barrier', color: '#f97316', speed: 0.0, label: 'ROADWORK' },
+        { z: 258, laneIdx: 0, kind: 'barrier', color: '#ef4444', speed: 0.0, label: 'BARRIER' },
+        { z: 274, laneIdx: 1, kind: 'car', color: '#3b82f6', speed: 0.13, label: 'SEDAN' },
+        { z: 290, laneIdx: 2, kind: 'truck', color: '#eab308', speed: 0.08, label: 'VAN' }
     ];
     obstacleTemplates.forEach((ob, idx) => {
         ctState.obstacles.push({
@@ -438,6 +449,7 @@ function startCrazyTaxiRun() {
     ctState.playerX = 0.0; // Start in middle lane
     ctState.steerVel = 0;
     ctState.driftAngle = 0;
+    ctState.driftDir = 0;
     ctState.driftCharge = 0;
     ctState.driftCashAccum = 0;
     ctState.speed = 0.20;
@@ -512,6 +524,7 @@ window.addEventListener('keyup', (e) => {
             triggerCrazyCombo('DRIFT BOOST! +$100', 100, '#38bdf8');
         }
         ctState.keys.space = false;
+        ctState.driftDir = 0;
         ctState.driftCharge = 0;
         ctState.driftCashAccum = 0;
     }
@@ -709,10 +722,25 @@ function ctLoop() {
         // 3-Lane + Roadside Shoulder Steering & Upgraded Crazy Drift Mechanic
         const steerInput = (ctState.keys.right ? 1 : 0) - (ctState.keys.left ? 1 : 0);
         if (isDrifting) {
-            // Drift physics: high slip angle yaw, wider lateral slide, skidmarks & sparks
-            const driftTargetVel = steerInput !== 0 ? steerInput * 0.034 : (ctState.driftAngle >= 0 ? 0.022 : -0.022);
+            // Once a drift starts, lock the direction! The player CANNOT switch drift direction while holding space.
+            // They must let go of space and/or start a new drift to change direction.
+            if (ctState.driftDir === 0) {
+                if (steerInput !== 0) {
+                    ctState.driftDir = steerInput; // -1 for left slide, +1 for right slide
+                } else if (Math.abs(ctState.steerVel) > 0.005) {
+                    ctState.driftDir = ctState.steerVel > 0 ? 1 : -1;
+                } else {
+                    ctState.driftDir = 1; // Default to right if initiating from neutral
+                }
+            }
+
+            const activeDir = ctState.driftDir;
+            // Lateral drift velocity in the locked direction (holding counter-steer slightly moderates angle but cannot reverse drift!)
+            const steerMod = (steerInput === -activeDir) ? 0.72 : 1.0;
+            const driftTargetVel = activeDir * 0.038 * steerMod;
             ctState.steerVel += (driftTargetVel - ctState.steerVel) * 0.18;
-            const targetYaw = steerInput !== 0 ? steerInput * 0.38 : (ctState.steerVel >= 0 ? 0.28 : -0.28);
+
+            const targetYaw = activeDir * (0.36 * steerMod);
             ctState.driftAngle += (targetYaw - ctState.driftAngle) * 0.22;
             ctState.driftCharge += 1;
 
@@ -745,9 +773,12 @@ function ctLoop() {
                 ctState.driftCashAccum += 25;
                 ctState.fare += 25;
                 updateHudDisplays();
-                setBannerText(`★ CRAZY DRIFT COMBO! +$${ctState.driftCashAccum} ★`, '#38bdf8');
+                setBannerText(`★ CRAZY DRIFT (${activeDir > 0 ? 'RIGHT' : 'LEFT'})! +$${ctState.driftCashAccum} ★`, '#38bdf8');
             }
         } else {
+            // Drift is not active - reset locked drift direction
+            ctState.driftDir = 0;
+
             // Crisp normal steering across Left (-0.58), Center (0.0), Right (+0.58), and Shoulders (±1.02)
             if (steerInput !== 0) {
                 ctState.steerVel += (steerInput * 0.025 - ctState.steerVel) * 0.28;
